@@ -1,0 +1,65 @@
+%!TEX TS-program = xelatex
+%
+%	A simple tex template for the thesis at CUHK.
+%
+% Author: Jinchao Li @ May 2023
+% ---------------------------------------------------------------------------- %
+%                                   preamble                                   %
+% ---------------------------------------------------------------------------- %
+\documentclass[12pt]{report}
+% ---------------------------- settings & commands --------------------------- %
+\input{settings/settings.tex} % will load fonts
+\input{settings/cmds.tex} % will load usrcmds
+% ----------------------------------- misc ----------------------------------- %
+\usepackage{lipsum}  % random text for template, could be deleted
+
+% ----------------------------------- info ----------------------------------- %
+\title{Thesis Title}
+\author{LAST, First}
+\degree{Doctor of Philosophy}
+\programme{Systems Engineering and Engineering Management}
+\institution{The Chinese University of Hong Kong}
+\date{Month Year}
+\committee{%
+	Professor X (Chair)\\
+	Professor X (Thesis Supervisor)\\
+	Professor X (Committee Member)\\
+	Professor X (External Examiner)%
+}
+
+% ---------------------------------------------------------------------------- %
+%                                   document                                   %
+% ---------------------------------------------------------------------------- %
+\begin{document}
+% -------------------------------- first pages ------------------------------- %
+\ifXeTeX
+	\input{add-ons/frontmatter.tex} % comment for faster compiling
+\else\fi
+% ------------------------------- main chapters ------------------------------ %
+\clearpage
+\pagestyle{main}
+\pagenumbering{arabic} % mainmatter
+% \setcounter{page}{1}
+
+\include{chapters/ch1-introduction.tex}
+
+% --------------------------------- appendix --------------------------------- %
+% \appendix
+% \include{add-ons/appx-A.tex}
+
+% ------------------------------- bibliography ------------------------------- %
+% The bibliography may be single spaced within each entry, but must be
+% 1.5 or 2-spaced between each entry. Most bibliography styles leave space between
+% entries, so that shouldn't be a problem.
+\begin{singlespacing}
+	% \renewcommand{\bibname}{References}
+	% Any bibliohgraphy style that leaves space between entries is fine
+	% \bibliographystyle{plain}
+	\bibliographystyle{settings/acl_natbib.bst}
+	% \bibliographystyle{thuthesis-numeric.bst}
+	\addbibtotoc%
+	\bibliography{references.bib}
+\end{singlespacing}
+
+
+\end{document}

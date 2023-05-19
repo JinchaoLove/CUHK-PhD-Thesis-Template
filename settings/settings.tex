@@ -1,0 +1,203 @@
+% !TEX root = ../thesis.tex
+% basic
+\usepackage{iftex}
+\usepackage{keyval}
+\usepackage{etoolbox}
+
+% string compare function: \ifstrequal{str1}{str2}{true}{false}
+\makeatletter
+\let\ifstrequal\@undefined % undefine \ifstrequal in etoolbox
+\makeatother
+\ExplSyntaxOn
+\cs_new_eq:NN \ifstrequal \str_if_eq:eeTF % redefine \ifstrequal
+\ExplSyntaxOff
+% ---------------------------------- fonts ----------------------------------- %
+\ifXeTeX
+    \input{./settings/fonts.tex} % English and Chinese fonts
+    \usepackage{xeCJKfntef} % underlining
+\else
+    \usepackage{mathptmx} % Times New Roman
+    \usepackage{ulem} % underlining
+\fi
+% font size
+\usepackage{anyfontsize}
+
+% ----------------------------------- math ----------------------------------- %
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{aliascnt} %  \autoref for math
+
+% ------------------------------- visualization ------------------------------ %
+% figure
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{float}
+\usepackage{graphicx}
+\graphicspath{ {figures/} }
+
+% table
+%% nomenclatures
+\usepackage[intoc]{nomencl}
+\makenomenclature
+
+% set width for caption
+\usepackage{caption}
+\captionsetup[figure]{width=\linewidth}
+% enumerate, itemize
+\usepackage[shortlabels,inline]{enumitem}
+% color
+\usepackage{soul,color,xcolor} % highlight: \hl{xxx}
+\soulregister{\cite}7  % 注册\cite命令
+\soulregister{\ref}7  % 注册\ref命令
+
+% ---------------------------------- layout ---------------------------------- %
+\usepackage[a4paper,inner=4cm,outer=2.5cm]{geometry}
+\usepackage{indentfirst}
+
+% \setlength{\footskip}{4.ex}
+% Dissertation should be onehalf/double-spaced throughout nodisplayskipstretch makes
+% sure equations are single-spaced. Otherwise array-like objects (say pmatrix)
+% look rather ugly.
+\usepackage[nodisplayskipstretch,doublespacing]{setspace}  % `doublespacing', `onehalfspacing', or `singlespacing'
+% This makes tables single-spaced by default. Since they are supposed to be
+% onehalf/double-space unless they are too long, need to set onehalf/double-space for tables
+% manually using \renewcommand{\arraystretch}{1.5} inside the table environment.
+% Using \begin{spacing}{1.x}xxx\end{spacing} for other environments.
+
+% Footnotes should single-spaced (setspace default), but there should be
+% double-spacing between footnotes.
+\setlength{\footnotesep}{0.8\baselineskip}
+
+% Reduce the white space before and after chapter heading
+% http://www.ctan.org/pkg/titlesec, defaults:
+% \titlespacing{<command>}{<left>}{<before-sep>}{<after-sep>}[<right>]
+% - {\chapter}{0pt}{50pt}{40pt}
+% - {\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+% - {\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\usepackage{titlesec}
+\titleformat{\chapter}[display]{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{0pt}{20pt} % default: {0pt}{50pt}{40pt}
+
+% ------------------------------ footer & header ----------------------------- %
+\usepackage{fancyhdr}
+% set headstyles
+% \fancyhead[C]{\small\textit{\nouppercase{\rightmark}}}
+% set different header in odd or even pages (LE,RO not work for one-side document)
+\newcommand{\headstyle}{%
+    \fancyhead{} % clear header fields
+    \fancyhead[L]{\ifodd\value{page}\else\small\textit{\nouppercase{\leftmark}}\fi}
+    \fancyhead[R]{\ifodd\value{page}\small\textit{\nouppercase{\rightmark}}\else\fi}
+    \renewcommand{\headrule}{\rule{\textwidth}{0.2pt}}
+    \setlength{\headheight}{25pt}
+}
+% set footstyles
+\newcommand{\footstyle}{
+    \fancyfoot[C]{\thepage}
+}
+\pagestyle{fancy} % set global pagestyle
+\fancyhf{} % clear the orginal headfoot style
+\headstyle{}
+\footstyle{}
+\fancypagestyle{abstract}{%
+    \fancyhf{}
+    \fancyhead[]{} % remove all header fields
+    \renewcommand{\headrule}{} % remove the headrule
+    \footstyle{}
+}
+\fancypagestyle{main}{%
+    \fancyhf{}
+    \headstyle{}
+    \footstyle{}
+}
+% rulewidth
+% \renewcommand{\headrulewidth}{0pt}
+%\renewcommand{\footrulewidth}{0.4pt}
+% \renewcommand{\headrule}{\rule{\textwidth}{0.4pt}}
+
+% raggedbottom: suppress auto adjustment of extra bottom margins, keep footnotes still
+\usepackage[stable,multiple,bottom,perpage,hang]{footmisc}
+
+% % appendix
+% \usepackage{appendix}
+
+% ------------------------------- environments ------------------------------- %
+\newtheorem{dummy}{***}[section]
+
+\theoremstyle{plain}
+\newaliascnt{theorem}{dummy}
+\newtheorem{theorem}[theorem]{Theorem}
+\aliascntresetthe{theorem}
+\providecommand*{\theoremautorefname}{Theorem}
+\newaliascnt{proposition}{dummy}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\providecommand*{\propositionautorefname}{Proposition}
+\newaliascnt{corollary}{dummy}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+\providecommand*{\corollaryautorefname}{Corollary}
+\newaliascnt{lemma}{dummy}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\providecommand*{\lemmaautorefname}{Lemma}
+\newaliascnt{conjecture}{dummy}
+\newtheorem{conjecture}[conjecture]{Conjecture}
+\aliascntresetthe{conjecture}
+\providecommand*{\conjectureautorefname}{Conjecture}
+
+\theoremstyle{definition}
+\newaliascnt{definition}{dummy}
+\newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+\providecommand*{\definitionautorefname}{Definition}
+\newaliascnt{example}{dummy}
+\newtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+\providecommand*{\exampleautorefname}{Example}
+
+\theoremstyle{remark}
+\newaliascnt{remark}{dummy}
+\newtheorem{remark}[remark]{Remark}
+\aliascntresetthe{remark}
+\providecommand*{\remarkautorefname}{Remark}
+
+\newtheorem{exercise}{Exercise}[section]
+\providecommand*{\exerciseautorefname}{Exercise}
+
+% -------------------------- hyperlinks & bookmarks -------------------------- %
+% usally hyperref is inputted at last, but before `algorithm'
+\usepackage{url}
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue,
+    plainpages=false,
+    hypertexnames=true,
+    backref=false, % false, section, page
+    % pagebackref=true, % don't use this, since page is numbered after preamble
+]{hyperref}
+
+\makeatletter
+\patchcmd{\BR@backref}{\newblock}{\newblock(Section~}{}{} % chktex 9
+\patchcmd{\BR@backref}{\par}{)\par}{}{} % chktex 9
+\makeatother
+% \newcommand{\myShift}{0} % Default value of backref shift
+% \newcommand{\myShiftSet}{%
+%   \renewcommand{\myShift}{\value{page}}% Set backref shift on certain page
+% }
+% \renewcommand{\pagebackref}[1]{\hyperlink{page.#1}{(p.~\pageref*{page.#1}+\textbf{\myShift})}}
+
+% reference
+\usepackage[numbers,sort&compress]{natbib} % automatically sort the citations
+%\renewcommand\bibname{Bibliography}
+% \usepackage{bibentry} % place bibliographic entries anywhere, \bibentry{xxx}
+
+% ---------------------------------- autoref --------------------------------- %
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\chapterautorefname}{Chapter}
+%\renewcommand{\equationautorefname}{Equation}
+
+% ----------------------------------- misc ----------------------------------- %
+\allowdisplaybreaks%

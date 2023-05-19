@@ -1,0 +1,160 @@
+% !TEX root = ../thesis.tex
+\makeatletter
+% ----------------------------------- info ----------------------------------- %
+% save title, author, date values
+\def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
+\def\author#1{\gdef\@author{#1}\gdef\theauthor{#1}}
+\def\date#1{\gdef\@date{#1}\gdef\thedate{#1}}
+% set and save other info values
+\newcommand{\degree}[1]{\gdef\degreeVal{#1}}%
+\newcommand{\degreeVal}{\@latex@warning@no@line{No \noexpand\degree{} given}}
+\newcommand{\programme}[1]{\gdef\programmeVal{#1}}%
+\newcommand{\programmeVal}{\@latex@warning@no@line{No \noexpand\programme{} given}}
+\newcommand{\institution}[1]{\gdef\institutionVal{#1}}%
+\newcommand{\institutionVal}{\@latex@warning@no@line{No \noexpand\institution{} given}}
+\newcommand{\committee}[1]{\gdef\committeeVal{#1}}%
+\newcommand{\committeeVal}{\@latex@warning@no@line{No \noexpand\committee{} given}}
+
+% ----------------------------------- pages ---------------------------------- %
+% coverpage
+\renewcommand{\maketitle}{%
+	% title page
+	% \pdfbookmark{Titlepage}{titlepage}
+	\thispagestyle{empty}
+	\null\vfil
+	\begin{doublespace}
+		\centering
+		{\huge\bf\@title}\\[3em]
+		{\Large\bf\@author}\\[2em]
+		A Thesis Submitted in Partial Fulfillment \\
+		of the Requirements for the Degree of \\
+		\degreeVal\\
+		in \\
+		{\programmeVal}\\[4em]
+		\institutionVal\\
+		\@date
+	\end{doublespace}
+	\vfil\null
+	\clearpage
+
+	% committee page
+	\newpage
+	\thispagestyle{empty}
+	\vspace*{60mm}
+	\begin{doublespace}
+		\centering
+		\vfill
+		% \Large
+		\underline{Thesis Assessment Committee}\\
+		\vspace*{5mm}
+		\committeeVal
+		\vfill
+	\end{doublespace}
+	\vspace*{50mm}
+	\clearpage
+}
+
+% abstract: english
+\newcommand{\makeabstract}{%
+	\begin{spacing}{1.2}\end{spacing} % Standard spacing for the header
+	\pagestyle{abstract}
+	%	\vspace{0.5cm}
+	\input{add-ons/abstract.tex}
+	\clearpage
+}
+
+% abstract: chinese
+\newcommand{\makeabstractChinese}{%
+	\begin{spacing}{1.2}\end{spacing} % Standard spacing for the header
+	\pagestyle{abstract}
+	%	\vspace{0.5cm}
+	\input{add-ons/abstract-zh.tex}
+	\clearpage
+}
+
+% acknowledgement
+\newcommand{\makeacknowledgement}{%
+	\chapter*{Acknowledgement}
+	\addcontentsline{toc}{chapter}{Acknowledgement}
+	\input{add-ons/acknowledgement.tex}
+	\clearpage
+}
+
+% publications
+\newcommand{\makepublications}{%
+	\chapter*{Selected Publications}
+	\addcontentsline{toc}{chapter}{Selected Publications}
+	\input{add-ons/publications.tex}
+	\clearpage
+}
+
+% ----------------------------------- TOC ------------------------------------ %
+% update toc
+\newcommand{\addloftotoc}{%
+	\cleardoublepage{}
+	\phantomsection{}
+	\addcontentsline{toc}{chapter}{\listfigurename}
+}
+\newcommand{\addlottotoc}{%
+	\cleardoublepage{}
+	\phantomsection{}
+	\addcontentsline{toc}{chapter}{\listtablename}
+}
+\newcommand{\addtocbm}{%
+	\cleardoublepage{}
+	\pdfbookmark{\contentsname}{toc}
+}
+\newcommand{\addbibtotoc}{%
+	\phantomsection{}
+	\addcontentsline{toc}{chapter}{\bibname}
+}
+
+% Set spacing of TOC, LOT, LOF
+\let\LaTeXTOC\tableofcontents
+\renewcommand{\tableofcontents}{%
+	\begin{spacing}{1.2} % 1.2 looks nicer than 1
+		\LaTeXTOC
+	\end{spacing}
+}
+% ---------------------------------- figure ---------------------------------- %
+\let\LaTeXLOF\listoffigures
+\renewcommand{\listoffigures}{%
+	\begin{spacing}{1.2}
+		\LaTeXLOF
+	\end{spacing}
+}
+
+% ---------------------------------- table ----------------------------------- %
+\let\LaTeXLOT\listoftables
+\renewcommand{\listoftables}{%
+	\begin{spacing}{1.2}
+		\LaTeXLOT
+	\end{spacing}
+}
+
+% --------------------------------- notation --------------------------------- %
+
+\newcommand{\mynomencl}[3][section]{%
+	\begingroup\edef\x{\endgroup
+		\unexpanded{\nomenclature{#2}}%
+		{\unexpanded{#3} (\csname the#1\endcsname)}}\x
+}
+% eg.
+% in section 1.1, \mynomencl{$A$}{term1, m$^{2}$} -> A  term1, m2  (1.1)
+% in section 2.x, \mynomencl[chapter]{$B$}{term2} -> B  term2  (2)
+\renewcommand{\nomlabel}[1]{\textbf{#1}}
+% \renewcommand{\nompreamble}{The next list describes several symbols that will be later used within the body of the document}
+\renewcommand{\pagedeclaration}[1]{\dotfill\hyperpage{#1}}
+
+% LON: listofterms (nomenclatures)
+\renewcommand{\nomname}{List of Terms}
+\let\LaTeXLON\printnomenclature
+\renewcommand{\printnomenclature}{%
+	\begin{spacing}{1.2}
+		\LaTeXLON
+	\end{spacing}
+}
+
+\makeatother
+
+\input{./settings/usrcmds}

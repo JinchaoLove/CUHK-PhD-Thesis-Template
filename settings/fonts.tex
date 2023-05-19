@@ -1,0 +1,291 @@
+% !TEX root = ../thesis.tex
+% font settings refer to [THUThesis](https://github.com/tuna/thuthesis)
+% ---------------------------------- basic ----------------------------------- %
+\usepackage[UTF8,scheme=plain,fontset=none]{ctex} % Chinese
+\usepackage{fontspec}
+
+% define configs for font setting
+\makeatletter
+\define@key{configs}{system}{\def\systemVal{#1}}
+\define@key{configs}{fontsystem}{\def\fontsystemVal{#1}}
+\define@key{configs}{enfont}{\def\enfontVal{#1}}
+\define@key{configs}{cjkfont}{\def\cjkfontVal{#1}}
+\makeatother
+
+% Mac Word path
+\def\MacWordFontPath{%
+    /Applications/Microsoft Word.app/Contents/Resources/DFonts/%
+}
+
+% --------------------------------- check OS --------------------------------- %
+
+% auto check operation system
+\IfFileExists{/System/Library/Fonts/Menlo.ttc}{
+    \setkeys{configs}{system = mac}
+}{
+    \IfFileExists{/dev/null}{
+        \IfFileExists{null:}{
+            \setkeys{configs}{system = windows}
+        }{
+            \setkeys{configs}{system = unix}
+        }
+    }{
+        \setkeys{configs}{system = windows}
+    }
+}
+% \PackageWarning{fontspec}{Operation System: \systemVal}
+
+% ------------------------------ select fontset ------------------------------ %
+% set auto fontset: windows, mac, ubuntu, fandol, none
+\ifstrequal{\systemVal}{windows}{
+    \setkeys{configs}{fontsystem = windows}
+}{
+    \IfFontExistsTF{SimSun}{
+        \setkeys{configs}{fontsystem = windows}
+    }{
+        \IfFileExists{\MacWordFontPath/SimSun.ttf}{
+            \setkeys{configs}{fontsystem = windows}
+        }{
+            \ifstrequal{\systemVal}{mac}{
+                \setkeys{configs}{fontsystem = mac}
+            }{
+                \IfFontExistsTF{Noto Serif CJK SC}{
+                    \setkeys{configs}{fontsystem = ubuntu}
+                }{
+                    \setkeys{configs}{fontsystem = fandol}
+                }
+            }
+        }
+    }
+}
+% \PackageWarning{fontspec}{Fontset series: \fontsystemVal}
+
+% ------------------------------ English fonts ------------------------------- %
+
+% set English fonts (\setENfont)
+\newcommand\setFontTimes{%
+    \setmainfont{Times New Roman}%
+    \setsansfont{Arial}%
+    \ifstrequal{\fontsystemVal}{mac}{
+        \setmonofont{Menlo}[Scale = MatchLowercase]%
+    }{
+        \setmonofont{Courier New}[Scale = MatchLowercase]%
+    }
+}
+% Linux: `Times New Roman' and `Arial' -> `TeX Gyre Termes' and `TeX Gyre Heros'.
+\newcommand\setTexGyreSansMono{%
+    \setsansfont{texgyreheros}[
+        Extension      = .otf, % chktex 26
+        UprightFont    = *-regular,
+        BoldFont       = *-bold,
+        ItalicFont     = *-italic,
+        BoldItalicFont = *-bolditalic,
+    ]%
+    \setmonofont{texgyrecursor}[
+        Extension      = .otf, % chktex 26
+        UprightFont    = *-regular,
+        BoldFont       = *-bold,
+        ItalicFont     = *-italic,
+        BoldItalicFont = *-bolditalic,
+        Scale          = MatchLowercase,
+        Ligatures      = CommonOff,
+    ]%
+}
+\newcommand\setFontTermes{%
+    \setmainfont{texgyretermes}[
+        Extension      = .otf, % chktex 26
+        UprightFont    = *-regular,
+        BoldFont       = *-bold,
+        ItalicFont     = *-italic,
+        BoldItalicFont = *-bolditalic,
+    ]%
+    \setTexGyreSansMono
+}
+
+% auto select corresponding fontsets
+\ifstrequal{\fontsystemVal}{windows}{
+    \setkeys{configs}{enfont = times}%
+    \newcommand\setENfont{\setFontTimes}
+}{
+    \ifstrequal{\fontsystemVal}{mac}{
+        \setkeys{configs}{enfont = times}%
+        \newcommand\setENfont{\setFontTimes}
+    }{
+        \setkeys{configs}{enfont = termes}%
+        \newcommand\setENfont{\setFontTermes}
+    }
+}
+% \PackageWarning{fontspec}{EN fontset: \enfontVal}
+\setENfont
+
+% ------------------------------ Chinese fonts ------------------------------- %
+% set Chinese fonts (\setZHfont)
+\newcommand\setCjkFontWindows{%
+    \setCJKmainfont{SimSun}[
+        AutoFakeBold = 3,
+        ItalicFont   = KaiTi,
+    ]%
+    \setCJKsansfont{SimHei}[AutoFakeBold = 3]%
+    \setCJKmonofont{FangSong}%
+    \setCJKfamilyfont{zhsong}{SimSun}[AutoFakeBold = 3]%
+    \setCJKfamilyfont{zhhei}{SimHei}[AutoFakeBold = 3]%
+    \setCJKfamilyfont{zhkai}{KaiTi}%
+    \setCJKfamilyfont{zhfs}{FangSong}%
+}
+\newcommand\setCjkFontMacword{%
+    \setCJKmainfont{SimSun}[%
+        Path         = \MacWordFontPath,
+        AutoFakeBold = 3,
+        ItalicFont   = KaiTi,
+    ]%
+    \setCJKsansfont{SimHei}[%
+        Path         = \MacWordFontPath,
+        AutoFakeBold = 3,
+    ]%
+    \setCJKmonofont{FangSong}[Path=\MacWordFontPath]%
+    \setCJKfamilyfont{zhsong}{SimSun}[%
+        Path         = \MacWordFontPath,
+        AutoFakeBold = 3,
+    ]%
+    \setCJKfamilyfont{zhhei}{SimHei}[%
+        Path         = \MacWordFontPath,
+        AutoFakeBold = 3,
+    ]%
+    \setCJKfamilyfont{zhkai}{KaiTi}[Path = \MacWordFontPath]%
+    \setCJKfamilyfont{zhfs}{FangSong}[Path = \MacWordFontPath]%
+}
+\newcommand\setCjkFontMac{%
+    \setCJKmainfont{Songti SC}[
+        UprightFont    = * Light,
+        BoldFont       = * Bold,
+        ItalicFont     = Kaiti SC Regular,
+        BoldItalicFont = Kaiti SC Bold,
+    ]%
+    \setCJKsansfont{Heiti SC}[
+        UprightFont    = * Light,
+        BoldFont       = * Medium,
+    ]%
+    \setCJKmonofont{STFangsong}
+    \setCJKfamilyfont{zhsong}{Songti SC}[
+        UprightFont    = * Light,
+        BoldFont       = * Bold,
+    ]%
+    \setCJKfamilyfont{zhhei}{Heiti SC}[
+        UprightFont    = * Light,
+        BoldFont       = * Medium,
+    ]%
+    \setCJKfamilyfont{zhfs}{STFangsong}%
+    \setCJKfamilyfont{zhkai}{Kaiti SC}[
+        UprightFont    = * Regular,
+        BoldFont       = * Bold,
+    ]%
+    \setCJKfamilyfont{zhli}{Baoli SC}%
+    \setCJKfamilyfont{zhyuan}{Yuanyi SC}[
+        UprightFont    = * Light,
+        BoldFont       = * Bold,
+    ]%
+}
+\newcommand\setCjkFontNoto{%
+    \setCJKmainfont{Noto Serif CJK SC}[
+        UprightFont    = * Light,
+        BoldFont       = * Bold,
+        ItalicFont     = FandolKai-Regular,
+        ItalicFeatures = {Extension = .otf}, % chktex 26
+    ]%
+    \setCJKsansfont{Noto Sans CJK SC}[BoldFont = * Medium]%
+    \setCJKmonofont{Noto Sans Mono CJK SC}%
+    \setCJKfamilyfont{zhsong}{Noto Serif CJK SC}[
+        UprightFont    = * Light,
+        UprightFont    = * Bold,
+    ]%
+    \setCJKfamilyfont{zhhei}{Noto Sans CJK SC}[BoldFont = * Medium]%
+    \setCJKfamilyfont{zhfs}{FandolFang}[
+        Extension      = .otf, % chktex 26
+        UprightFont    = *-Regular,
+    ]%
+    \setCJKfamilyfont{zhkai}{FandolKai}[
+        Extension      = .otf, % chktex 26
+        UprightFont    = *-Regular,
+    ]%
+}
+\newcommand\setCjkFontFandol{%
+    \setCJKmainfont{FandolSong}[
+        Extension   = .otf, % chktex 26
+        UprightFont = *-Regular,
+        BoldFont    = *-Bold,
+        ItalicFont  = FandolKai-Regular,
+        ItalicFeatures = {Extension = .otf}, % chktex 26
+    ]%
+    \setCJKsansfont{FandolHei}[
+        Extension   = .otf, % chktex 26
+        UprightFont = *-Regular,
+        BoldFont    = *-Bold,
+    ]%
+    \setCJKmonofont{FandolFang}[
+        Extension   = .otf, % chktex 26
+        UprightFont = *-Regular,
+    ]%
+    \setCJKfamilyfont{zhsong}{FandolSong}[
+        Extension   = .otf, % chktex 26
+        UprightFont = *-Regular,
+        BoldFont    = *-Bold,
+    ]%
+    \setCJKfamilyfont{zhhei}{FandolHei}[
+        Extension   = .otf, % chktex 26
+        UprightFont = *-Regular,
+        BoldFont    = *-Bold,
+    ]%
+    \setCJKfamilyfont{zhfs}{FandolFang}[
+        Extension   = .otf, % chktex 26
+        UprightFont = *-Regular,
+    ]%
+    \setCJKfamilyfont{zhkai}{FandolKai}[
+        Extension   = .otf, % chktex 26
+        UprightFont = *-Regular,
+    ]%
+}
+\newcommand\setCjkFontNone{
+    \newcommand\songti{\CJKfamily{zhsong}}
+    \newcommand\heiti{\CJKfamily{zhhei}}
+    \newcommand\fangsong{\CJKfamily{zhfs}}
+    \newcommand\kaishu{\CJKfamily{zhkai}}
+}
+%% auto select corresponding fontsets
+\ifstrequal{\fontsystemVal}{mac}{
+    \setkeys{configs}{cjkfont = mac}
+    \newcommand\setZHfont{\setCjkFontMac}
+}{
+    \ifstrequal{\fontsystemVal}{windows}{
+        \IfFontExistsTF{SimSun}{
+            \setkeys{configs}{cjkfont = windows}
+            \newcommand\setZHfont{\setCjkFontWindows}
+        }{
+            \IfFileExists{\MacWordFontPath/SimSun.ttf}{
+                \setkeys{configs}{cjkfont = macword}
+                \newcommand\setZHfont{\setCjkFontMacword}
+            }{
+                \errmessage{Cannot find ``SimSun'' font}
+                \setkeys{configs}{cjkfont = none}
+                \newcommand\setZHfont{\setCjkFontNone}
+            }
+        }
+    }{
+        \ifstrequal{\fontsystemVal}{ubuntu}{
+            \setkeys{configs}{cjkfont = noto}
+            \newcommand\setZHfont{\setCjkFontNoto}
+        }{
+            \setkeys{configs}{cjkfont = fandol}
+            \newcommand\setZHfont{\setCjkFontFandol}
+        }
+    }
+}
+% \PackageWarning{fontspec}{Chinese fontset: \cjkfontVal}
+\setZHfont
+
+% ----------------------------------- info ----------------------------------- %
+\PackageWarning{fontspec}{%
+    Operation System: \systemVal \\
+    Fontset series: \fontsystemVal \\
+    English fontset: \enfontVal \\
+    Chinese fontset: \cjkfontVal
+}

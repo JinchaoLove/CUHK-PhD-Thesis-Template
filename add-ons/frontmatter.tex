@@ -1,0 +1,31 @@
+\maketitle % titlepage
+
+\pagenumbering{roman} % frontmatter
+\setcounter{page}{1}
+
+\makeabstract% english abstract
+
+\ifXeTeX
+    \makeabstractChinese% chinese abstract
+\else
+\fi
+
+\makeacknowledgement% acknowledgement 
+
+% \makepublications% publications
+
+\hypersetup{linkcolor=black}
+
+% show table of contents
+\addtocbm%
+\tableofcontents % toc
+% List of figures, tables
+\addloftotoc%
+\listoffigures % lof
+\addlottotoc%
+\listoftables % lot
+% List of terms
+\input{add-ons/notations.tex}
+\printnomenclature%
+
+\hypersetup{linkcolor=blue}
