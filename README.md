@@ -17,9 +17,11 @@ A simple LaTeX template for CUHK thesis based on [CUHK format guide](https://www
 
 ## Usage
 
+> TL;DR: Run command `latexmk && latexmk -c` in shell.
+
 Edit the corresponding `.tex`, `.bib` files with your favorite editor and compile `thesis.tex` with `latexmk` command. Then you will get the [demo](thesis.pdf).
 
-For fast compiling, set `draftmode=1` in `.latexmkrc`, this will skip front-matters and Chinese fonts. For final compiling, convert to `draftmode=0` (default).
+For **fast** compiling, set `draftmode=1` in `.latexmkrc`, this will skip front-matters and Chinese fonts. For **final** compiling, convert to `draftmode=0` (default).
 
 To clean up auxiliary files, run `latexmk -c`.
 
@@ -45,7 +47,7 @@ To clean up auxiliary files, run `latexmk -c`.
 - Main styles: [CUHKthesis](https://github.com/zfengg/CUHKthesis) by Zhou Feng @ 2022/12/15
 - Spacing: [CUHK-PHD-Thesis-Template](https://github.com/lixin4ever/CUHK-PHD-Thesis-Template) by Xin Li @ 2021/04/10
 - Bib-styles: [acl-style-files](https://github.com/acl-org/acl-style-files) by acl-org @ 2021/12/20
-- Fonts, bib-styles: [THUThesis](https://github.com/tuna/thuthesis) by TUNA @ 2023/04/06, v7.3.2
+- Fonts, bib-styles: [THUThesis](https://github.com/tuna/thuthesis) by TUNA @ 2024/07/01, v7.5.2
 - LatexMk compiler: [Overleaf](https://www.overleaf.com/learn/how-to/How_does_Overleaf_compile_my_project%3F)
 
 ---

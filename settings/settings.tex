@@ -21,6 +21,7 @@
 \fi
 % font size
 \usepackage{anyfontsize}
+% \fontsize{<size>}{<baselineskip>}\selectfont
 
 % ----------------------------------- math ----------------------------------- %
 \usepackage{amsmath,amsfonts,amssymb,amsthm}
@@ -30,14 +31,16 @@
 
 % ------------------------------- visualization ------------------------------ %
 % figure
-\usepackage{tikz}
-\usepackage{tikz-cd}
+\usepackage{tikz,tikz-cd}
 \usepackage{float}
 \usepackage{graphicx}
 \graphicspath{ {figures/} }
 
 % table
-%% nomenclatures
+\usepackage{array,booktabs,tabularx} % basic
+\usepackage{multirow,adjustbox,makecell} % advanced
+
+% nomenclatures
 \usepackage[intoc]{nomencl}
 \makenomenclature
 
@@ -47,9 +50,13 @@
 % enumerate, itemize
 \usepackage[shortlabels,inline]{enumitem}
 % color
-\usepackage{soul,color,xcolor} % highlight: \hl{xxx}
-\soulregister{\cite}7  % 注册\cite命令
-\soulregister{\ref}7  % 注册\ref命令
+\usepackage{soul,color,xcolor,comment} % highlight: \hl{xxx}
+\soulregister{\cite}7
+\soulregister{\ref}7
+% set highlight style: red bold text with yellow background
+\sethlcolor{yellow}
+\let\oldhl\hl
+\renewcommand{\hl}[1]{\textcolor{red}{\oldhl{\textbf{#1}}}}
 
 % ---------------------------------- layout ---------------------------------- %
 \usepackage[a4paper,inner=4cm,outer=2.5cm]{geometry}
@@ -166,8 +173,21 @@
 \providecommand*{\exerciseautorefname}{Exercise}
 
 % -------------------------- hyperlinks & bookmarks -------------------------- %
-% usally hyperref is inputted at last, but before `algorithm'
+% usally hyperref is inputted at last, but before `algorithm', `hypernat', etc.
 \usepackage{url}
+\usepackage{ifthen}
+
+\newboolean{useAuthorYear}
+\setboolean{useAuthorYear}{true} % Set to `true' or `false'
+\ifthenelse{\boolean{useAuthorYear}}{
+    % reference: `author-year' without `compress'
+    \usepackage[square,sort]{natbib}
+    \renewcommand*{\cite}{\citep} % uncomment if using `author-year'
+}{
+    % reference: `numbers' with `compress'
+    \usepackage[square,numbers,sort&compress]{natbib}
+}
+
 \usepackage[
     colorlinks=true,
     linkcolor=blue,
@@ -175,12 +195,14 @@
     urlcolor=blue,
     plainpages=false,
     hypertexnames=true,
-    backref=false, % false, section, page
-    % pagebackref=true, % don't use this, since page is numbered after preamble
+    backref=page, % false, section, page
+    % pagebackref=true, % same with `backref=page'
 ]{hyperref}
 
+\usepackage{hypernat} % Make `backref' work with compressed `natbib'. Load after them!
+
 \makeatletter
-\patchcmd{\BR@backref}{\newblock}{\newblock(Section~}{}{} % chktex 9
+\patchcmd{\BR@backref}{\newblock}{\newblock(}{}{} % chktex 9
 \patchcmd{\BR@backref}{\par}{)\par}{}{} % chktex 9
 \makeatother
 % \newcommand{\myShift}{0} % Default value of backref shift
@@ -189,8 +211,6 @@
 % }
 % \renewcommand{\pagebackref}[1]{\hyperlink{page.#1}{(p.~\pageref*{page.#1}+\textbf{\myShift})}}
 
-% reference
-\usepackage[numbers,sort&compress]{natbib} % automatically sort the citations
 %\renewcommand\bibname{Bibliography}
 % \usepackage{bibentry} % place bibliographic entries anywhere, \bibentry{xxx}
 

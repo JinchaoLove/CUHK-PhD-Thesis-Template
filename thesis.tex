@@ -55,8 +55,12 @@
 	% \renewcommand{\bibname}{References}
 	% Any bibliohgraphy style that leaves space between entries is fine
 	% \bibliographystyle{plain}
-	\bibliographystyle{settings/acl_natbib.bst}
-	% \bibliographystyle{thuthesis-numeric.bst}
+	% Set `useAuthorYear' in `settings/settings.tex' or run `\setboolean{useAuthorYear}{false}'
+	\ifthenelse{\boolean{useAuthorYear}}{
+		\bibliographystyle{settings/acl_natbib.bst}
+	}{
+		\bibliographystyle{settings/thuthesis-numeric.bst}
+	}
 	\addbibtotoc%
 	\bibliography{references.bib}
 \end{singlespacing}
